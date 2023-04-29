@@ -22,7 +22,7 @@ public class Board {
         for (int col = 0; col < boardCells.length; col++) {
             for (int row = 0; row < boardCells[col].length; row++) {
                 boardCells[col][row] = new Cell(col, row, this.cellSideLength);
-                if (Math.random()*100 > adjustedTurdFactor) {
+                if (Math.random()*100 < adjustedTurdFactor) {
                     boardCells[col][row].setTurd(true);
                 }
             }

@@ -8,6 +8,8 @@ public class Cell extends Rectangle {
     private int columnNumber;
     private boolean turd = false;
     private boolean revealed = false;
+    private int xPosition;
+    private int yPosition;
 
     public Cell(int columnNumber, int rowNumber, int sideLength) {
         this.columnNumber = columnNumber;
@@ -41,5 +43,21 @@ public class Cell extends Rectangle {
 
     public void setRevealed(boolean revealed) {
         this.revealed = revealed;
+    }
+
+    public int getxPosition() {
+        return xPosition;
+    }
+
+    public void setxPosition(int xPosition) {
+        this.xPosition = xPosition;
+    }
+
+    public int getyPosition() {
+        return yPosition;
+    }
+
+    public void setyPosition(int yPosition) {
+        this.yPosition = yPosition;
     }
 }
