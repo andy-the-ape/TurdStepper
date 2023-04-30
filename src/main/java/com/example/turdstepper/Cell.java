@@ -8,6 +8,7 @@ public class Cell extends Rectangle {
     private int columnNumber;
     private boolean turd = false;
     private boolean revealed = false;
+    private boolean hasFlag = false;
     private int xPosition;
     private int yPosition;
 
@@ -59,5 +60,13 @@ public class Cell extends Rectangle {
 
     public void setyPosition(int yPosition) {
         this.yPosition = yPosition;
+    }
+
+    public boolean isHasFlag() {
+        return hasFlag;
+    }
+
+    public void setHasFlag(boolean hasFlag) {
+        this.hasFlag = hasFlag;
     }
 }

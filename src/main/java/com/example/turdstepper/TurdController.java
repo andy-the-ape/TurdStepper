@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -21,6 +22,7 @@ public class TurdController {
     private AnchorPane AP1 = new AnchorPane();
     public Board gameBoard = new Board(600,600,30,30);
     private File turdImageFile = new File("src/main/resources/icons/turd16x16.png");
+    private File flagImageFile = new File("src/main/resources/icons/flag16x16.png");
     private boolean winCondition = false;
     private boolean loseCondition = false;
 
@@ -31,20 +33,32 @@ public class TurdController {
     @FXML
     public void initialize() {
         drawInitialBoardTiles();
+
+        // Mouse click eventhandler
         AP1.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
             int xCoord = (int) mouseEvent.getSceneX();
             int yCoord = (int) mouseEvent.getSceneY();
-
             int cellColumn = (xCoord / gameBoard.getCellSideLength());
             System.out.println(cellColumn);
             int cellRow = (yCoord / gameBoard.getCellSideLength());
             System.out.println(cellRow);
             Cell[][] cellArray = gameBoard.getBoardCells();
-            reveal(cellArray[cellColumn][cellRow]);
+
+            // Left mouse button click
+            if (mouseEvent.getButton() == MouseButton.PRIMARY) {
+                reveal(cellArray[cellColumn][cellRow]);
+            // Right mouse button click
+            } else if (mouseEvent.getButton() == MouseButton.SECONDARY) {
+                cellArray[cellColumn][cellRow].setHasFlag(true);
+            }
+
             updateBoardTiles();
             mouseEvent.consume();
             gameConditionCheck();
+
         });
+
+
     }
 
     public void gameConditionCheck() {
@@ -70,7 +84,9 @@ public class TurdController {
 
     public void updateBoardTiles() {
         ArrayList<Text> cellTextArrayList = new ArrayList<>();
+        ArrayList<ImageView> flagImageArrayList = new ArrayList<>();
         ImageView turdImg = null;
+        ImageView flagImg = null;
         for (Node node : AP1.getChildren()) {
             if (node.getClass().equals(Text.class)) {
                 continue;
@@ -79,6 +95,10 @@ public class TurdController {
                 continue;
             }
             Cell cell = (Cell)node;
+            if (cell.isHasFlag()) {
+                plantFlag(cell);
+                flagImageArrayList.add(plantFlag(cell));
+            }
             if (cell.isRevealed()) {
                 if (cell.isTurd()) {
                     revealTurd(cell);
@@ -90,6 +110,7 @@ public class TurdController {
             }
         }
         AP1.getChildren().addAll(cellTextArrayList);
+        AP1.getChildren().addAll(flagImageArrayList);
         if (turdImg != null) {
             AP1.getChildren().add(turdImg);
             loseCondition = true;
@@ -107,7 +128,17 @@ public class TurdController {
         turdImgView.setY(cell.getyPosition());
         return turdImgView;
     }
-
+    public ImageView plantFlag(Cell cell) {
+        cell.setHasFlag(true);
+        ImageView flagImgView = new ImageView();
+        flagImgView.setImage(new Image(flagImageFile.toURI().toString()));
+        flagImgView.setPreserveRatio(true);
+        flagImgView.setFitHeight(cell.getSideLength());
+        flagImgView.setFitWidth(cell.getSideLength());
+        flagImgView.setX(cell.getxPosition());
+        flagImgView.setY(cell.getyPosition());
+        return flagImgView;
+    }
     public Text revealBlank(Cell cell) {
         cell.setFill(Color.WHITESMOKE);
 
