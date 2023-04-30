@@ -1,5 +1,7 @@
 package com.example.turdstepper;
 
+import javafx.animation.RotateTransition;
+import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
@@ -12,6 +14,8 @@ import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import javafx.scene.transform.Rotate;
+import javafx.util.Duration;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -80,6 +84,17 @@ public class TurdController {
         endGameText.setFill(Color.BLACK);
         AP1.getChildren().removeAll();
         AP1.getChildren().add(endGameText);
+
+        TranslateTransition tt = new TranslateTransition(Duration.minutes(2),endGameText);
+        int translationYTarget = gameBoard.getBoardHeight();
+        tt.toYProperty().setValue(translationYTarget);
+        tt.setAutoReverse(true);
+        tt.play();
+        RotateTransition rt = new RotateTransition(Duration.minutes(2));
+        rt.setByAngle(360);
+        rt.setNode(endGameText);
+        rt.play();
+
     }
 
     public void updateBoardTiles() {
@@ -87,10 +102,13 @@ public class TurdController {
         ArrayList<ImageView> flagImageArrayList = new ArrayList<>();
         ImageView turdImg = null;
 
-        // Store existing image views to be removed
+        // Store existing image views and cell texts to be removed
         ArrayList<ImageView> existingImageViews = new ArrayList<>();
+        ArrayList<Text> existingCellTexts = new ArrayList<>();
+
         for (Node node : AP1.getChildren()) {
             if (node.getClass().equals(Text.class)) {
+                existingCellTexts.add((Text) node);
                 continue;
             }
             if (node.getClass().equals(ImageView.class)) {
@@ -111,8 +129,9 @@ public class TurdController {
             }
         }
 
-        // Remove existing image views
+        // Remove existing image views and cell texts
         AP1.getChildren().removeAll(existingImageViews);
+        AP1.getChildren().removeAll(existingCellTexts);
 
         // Add new image views
         AP1.getChildren().addAll(cellTextArrayList);
