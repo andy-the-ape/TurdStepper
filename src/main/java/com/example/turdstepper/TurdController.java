@@ -86,22 +86,23 @@ public class TurdController {
         ArrayList<Text> cellTextArrayList = new ArrayList<>();
         ArrayList<ImageView> flagImageArrayList = new ArrayList<>();
         ImageView turdImg = null;
-        ImageView flagImg = null;
+
+        // Store existing image views to be removed
+        ArrayList<ImageView> existingImageViews = new ArrayList<>();
         for (Node node : AP1.getChildren()) {
             if (node.getClass().equals(Text.class)) {
                 continue;
             }
             if (node.getClass().equals(ImageView.class)) {
+                existingImageViews.add((ImageView) node);
                 continue;
             }
-            Cell cell = (Cell)node;
+            Cell cell = (Cell) node;
             if (cell.isHasFlag()) {
-                plantFlag(cell);
                 flagImageArrayList.add(plantFlag(cell));
             }
             if (cell.isRevealed()) {
                 if (cell.isTurd()) {
-                    revealTurd(cell);
                     turdImg = revealTurd(cell);
                 } else {
                     Text cellText = revealBlank(cell);
@@ -109,6 +110,11 @@ public class TurdController {
                 }
             }
         }
+
+        // Remove existing image views
+        AP1.getChildren().removeAll(existingImageViews);
+
+        // Add new image views
         AP1.getChildren().addAll(cellTextArrayList);
         AP1.getChildren().addAll(flagImageArrayList);
         if (turdImg != null) {
@@ -116,6 +122,41 @@ public class TurdController {
             loseCondition = true;
         }
     }
+
+
+    //    public void updateBoardTiles() {
+//        ArrayList<Text> cellTextArrayList = new ArrayList<>();
+//        ArrayList<ImageView> flagImageArrayList = new ArrayList<>();
+//        ImageView turdImg = null;
+//        for (Node node : AP1.getChildren()) {
+//            if (node.getClass().equals(Text.class)) {
+//                continue;
+//            }
+//            if (node.getClass().equals(ImageView.class)) {
+//                continue;
+//            }
+//            Cell cell = (Cell)node;
+//            if (cell.isHasFlag()) {
+//                plantFlag(cell);
+//                flagImageArrayList.add(plantFlag(cell));
+//            }
+//            if (cell.isRevealed()) {
+//                if (cell.isTurd()) {
+//                    revealTurd(cell);
+//                    turdImg = revealTurd(cell);
+//                } else {
+//                    Text cellText = revealBlank(cell);
+//                    cellTextArrayList.add(cellText);
+//                }
+//            }
+//        }
+//        AP1.getChildren().addAll(cellTextArrayList);
+//        AP1.getChildren().addAll(flagImageArrayList);
+//        if (turdImg != null) {
+//            AP1.getChildren().add(turdImg);
+//            loseCondition = true;
+//        }
+//    }
     public ImageView revealTurd(Cell cell) {
         cell.setFill(Color.BEIGE);
 
