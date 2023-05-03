@@ -27,7 +27,7 @@ public class TurdController {
 
     @FXML
     private AnchorPane AP1 = new AnchorPane();
-    public Board gameBoard = new Board(600,600,30,30);
+    public Board gameBoard = new Board(300,300,30,10);
     private File turdImageFile = new File("src/main/resources/icons/turd16x16.png");
     private File flagImageFile = new File("src/main/resources/icons/flag16x16.png");
     private boolean winCondition = false;
@@ -224,7 +224,9 @@ public class TurdController {
     }
 
     public void reveal(Cell cell) {
-        cell.setRevealed(true);
+        if (!cell.isHasFlag()) {
+            cell.setRevealed(true);
+        }
     }
 
     public void flagToggle(Cell cell) {
