@@ -14,7 +14,7 @@ import java.io.IOException;
 
 public class TurdApplication extends Application {
     Image shoeCursor;
-
+    File shoeImageFile;
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -22,7 +22,8 @@ public class TurdApplication extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(TurdApplication.class.getResource("game-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(),controller.gameBoard.getBoardHeight(), controller.gameBoard.getBoardWidth(), Color.LIGHTGRAY);
         fxmlLoader.setController(controller);
-        shoeCursor = new Image("src/main/resources/icons/shoe16x16.png");
+        shoeImageFile = new File("src/main/resources/icons/shoe16x16.png");
+        shoeCursor = new Image(shoeImageFile.toURI().toString());
         scene.setCursor(new ImageCursor(shoeCursor));
 //        Group root = new Group();
 //        Scene scene = new Scene(root,gameBoard.getBoardHeight(), gameBoard.getBoardWidth(), Color.LIGHTGRAY);
